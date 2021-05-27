@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="1" author="a.akifev">
+        <createTable tableName="file_description">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="original_file_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="error_cause" type="text"/>
+
+            <column name="state" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createIndex tableName="file_description" indexName="file_description_original_file_name_index">
+            <column name="original_file_name"/>
+        </createIndex>
+
+        <sql>
+            CREATE INDEX file_description_file_name_index ON file_description USING HASH(file_name);
+        </sql>
+
+        <sql>
+            CREATE INDEX file_description_state_index ON file_description USING HASH(state);
+        </sql>
+
+        <createTable tableName="file_entry">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="word" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="file_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="file_entry"
+                                 baseColumnNames="file_id"
+                                 constraintName="fk_file_entry_file_id"
+                                 referencedTableName="file_description"
+                                 referencedColumnNames="id"/>
+
+        <sql>
+            CREATE INDEX file_entry_word_index ON file_entry USING HASH(word);
+        </sql>
+
+        <createIndex tableName="file_entry" indexName="file_entry_word_file_id_index" unique="true">
+            <column name="word"/>
+            <column name="file_id"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

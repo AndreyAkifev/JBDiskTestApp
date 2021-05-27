@@ -1,0 +1,37 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog/master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jbdisk
+    username: postgres
+    password: postgres
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+
+  servlet:
+    multipart:
+      max-file-size: 1MB
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  error:
+    include-message: always
+
+application:
+
+  configuration:
+
+    aws:
+      credentials:
+        access-key:
+        secret-key:
+      region:
+      s3:
+        bucket:
